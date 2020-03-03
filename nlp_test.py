@@ -1,10 +1,12 @@
 # code for NLTK from
 # https://www.digitalocean.com/community/tutorials/how-to-perform-sentiment-analysis-in-python-3-using-the-natural-language-toolkit-nltk
+
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import twitter_samples, stopwords
 from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize
-from nltk import FreqDist, classify, NaiveBayesClassifier
+from nltk import FreqDist, classify, NaiveBayesClassifier#, ne_chunk
+import GetOldTweets3 as got
 
 import re, string, random
 
@@ -13,8 +15,11 @@ def remove_noise(tweet_tokens, stop_words = ()):
     cleaned_tokens = []
 
     for token, tag in pos_tag(tweet_tokens):
+        # regex to remove hyperlinks
         token = re.sub('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|'\
                        '(?:%[0-9a-fA-F][0-9a-fA-F]))+','', token)
+
+        # regex to removes the @twitter_handle (mentions)
         token = re.sub("(@[A-Za-z0-9_]+)","", token)
 
         if tag.startswith("NN"):
@@ -24,11 +29,15 @@ def remove_noise(tweet_tokens, stop_words = ()):
         else:
             pos = 'a'
 
+        # stemming / lemmstization - normalization
+        # grouping together the inflected forms of a word so they can be analysed as a single item
         lemmatizer = WordNetLemmatizer()
         token = lemmatizer.lemmatize(token, pos)
 
-        if len(token) > 0 and token not in string.punctuation and token.lower() not in stop_words:
+        # removes punctuations and stop words
+        if (len(token) > 0) and (token not in string.punctuation) and (token.lower() not in stop_words):
             cleaned_tokens.append(token.lower())
+        # cleaned_tokens = ne_chunk(cleaned_tokens)
     return cleaned_tokens
 
 def get_all_words(cleaned_tokens_list):
@@ -41,11 +50,6 @@ def get_tweets_for_model(cleaned_tokens_list):
         yield dict([token, True] for token in tweet_tokens)
 
 if __name__ == "__main__":
-
-    positive_tweets = twitter_samples.strings('positive_tweets.json')
-    negative_tweets = twitter_samples.strings('negative_tweets.json')
-    text = twitter_samples.strings('tweets.20150430-223406.json')
-    tweet_tokens = twitter_samples.tokenized('positive_tweets.json')[0]
 
     stop_words = stopwords.words('english')
 
@@ -88,8 +92,19 @@ if __name__ == "__main__":
 
     print(classifier.show_most_informative_features(10))
 
-    custom_tweet = "I ordered just once from TerribleCo, they screwed up, never used the app again."
 
-    custom_tokens = remove_noise(word_tokenize(custom_tweet))
+    searchTerm = input("Enter Keyword/Tag to search about: ")
+    nooftweets = int(input("Enter how many tweets to search: "))
 
-    print(custom_tweet, classifier.classify(dict([token, True] for token in custom_tokens)))
+    tweetCriteria = got.manager.TweetCriteria().setQuerySearch(searchTerm)\
+                                            .setSince("2019-12-08")\
+                                            .setUntil("2020-01-08")\
+                                            .setEmoji("unicode")\
+                                            .setLang("en")\
+                                            .setMaxTweets(nooftweets)
+    tweets = got.manager.TweetManager.getTweets(tweetCriteria)
+
+    for tweet in tweets:
+        tokenised_tweet = remove_noise(word_tokenize(tweet.text))
+        print(tweet.text, classifier.classify(dict([token, True] for token in tokenised_tweet)))
+        print()
