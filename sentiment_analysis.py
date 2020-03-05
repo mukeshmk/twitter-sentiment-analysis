@@ -5,7 +5,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import twitter_samples, stopwords
 from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize
-from nltk import FreqDist, classify, NaiveBayesClassifier#, ne_chunk
+from nltk import FreqDist, classify, NaiveBayesClassifier
 import GetOldTweets3 as got
 
 import re, string, random
@@ -37,7 +37,6 @@ def remove_noise(tweet_tokens, stop_words = ()):
         # removes punctuations and stop words
         if (len(token) > 0) and (token not in string.punctuation) and (token.lower() not in stop_words):
             cleaned_tokens.append(token.lower())
-        # cleaned_tokens = ne_chunk(cleaned_tokens)
     return cleaned_tokens
 
 def get_all_words(cleaned_tokens_list):
