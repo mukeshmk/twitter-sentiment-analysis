@@ -1,5 +1,5 @@
 import tweepy
-from twitterapi.twitter_config import *
+from config import *
 
 # Creating the authentication object
 auth = tweepy.OAuthHandler(API_KEY, API_SECRET_KEY)
