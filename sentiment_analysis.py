@@ -7,6 +7,7 @@ from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist, classify, NaiveBayesClassifier
 import GetOldTweets3 as got
+import pandas as pd
 
 import re, string, random
 
@@ -91,19 +92,9 @@ if __name__ == "__main__":
 
     print(classifier.show_most_informative_features(10))
 
+    df = pd.read_csv("datasets/ge2020_2020-02-06_to_2020-02-08_111726.csv")
 
-    searchTerm = input("Enter Keyword/Tag to search about: ")
-    nooftweets = int(input("Enter how many tweets to search: "))
-
-    tweetCriteria = got.manager.TweetCriteria().setQuerySearch(searchTerm)\
-                                            .setSince("2019-12-08")\
-                                            .setUntil("2020-01-08")\
-                                            .setEmoji("unicode")\
-                                            .setLang("en")\
-                                            .setMaxTweets(nooftweets)
-    tweets = got.manager.TweetManager.getTweets(tweetCriteria)
-
-    for tweet in tweets:
-        tokenised_tweet = remove_noise(word_tokenize(tweet.text))
-        print(tweet.text, classifier.classify(dict([token, True] for token in tokenised_tweet)))
+    for index, row in df.iterrows():
+        tokenised_tweet = remove_noise(word_tokenize(row['text']))
+        print(row['text'], classifier.classify(dict([token, True] for token in tokenised_tweet)))
         print()
