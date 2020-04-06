@@ -1,6 +1,7 @@
 # code for NLTK from
 # https://www.digitalocean.com/community/tutorials/how-to-perform-sentiment-analysis-in-python-3-using-the-natural-language-toolkit-nltk
 
+import os
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import twitter_samples, stopwords
 from nltk.tag import pos_tag
@@ -95,16 +96,42 @@ if __name__ == "__main__":
 
     # print(classifier.show_most_informative_features(10))
 
-    df = pd.read_csv("datasets/ge2020_2020-02-06_to_2020-02-08_111726.csv")
+    print('Begin Classifying the Data!')
 
-    print('Classifying the Data!')
-    pos_count = neg_count = 0
-    for index, row in df.iterrows():
-        tokenised_tweet = remove_noise(word_tokenize(row['text']))
-        if(classifier.classify(dict([token, True] for token in tokenised_tweet)) == 'Positive'):
-            pos_count += 1
-        else:
-            neg_count += 1
+    data_dir = os.path.dirname(os.path.realpath(__file__)) + "\datasets"
 
-    print('Positive Count ' + str(pos_count))
-    print('Negative Count ' + str(neg_count))
+    filelist = []
+    for (dirpath, dirnames, filenames) in os.walk(data_dir):
+        for f in filenames:
+            filepath = dirpath + '\\' +f
+            filelist.append(filepath)
+
+    total_pos_count = {}
+    total_neg_count = {}
+    for f in filelist:
+        df = pd.read_csv(f)
+
+        print('\nClassifying the Data for ' + f)
+
+        pos_count = 0
+        neg_count = 0
+        for index, row in df.iterrows():
+            tokenised_tweet = remove_noise(word_tokenize(row['text']))
+            if(classifier.classify(dict([token, True] for token in tokenised_tweet)) == 'Positive'):
+                pos_count += 1
+            else:
+                neg_count += 1
+
+        total_pos_count[f] = pos_count
+        total_neg_count[f] = neg_count
+
+        print('Positive Count ' + str(pos_count))
+        print('Negative Count ' + str(neg_count))
+
+    with open('pos_count.txt', 'w') as f1:
+        for key1, value1 in total_pos_count.items():
+            f1.write("%s - %s\n" % (key1, value1))
+
+    with open('neg_count.txt', 'w') as f2:
+        for key2, value2 in total_neg_count.items():
+            f2.write("%s - %s\n" % (key2, value2))
