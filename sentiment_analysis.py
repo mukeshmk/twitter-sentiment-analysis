@@ -101,13 +101,19 @@ if __name__ == "__main__":
     data_dir = os.path.dirname(os.path.realpath(__file__)) + "\datasets"
 
     filelist = []
+    dirset = set()
     for (dirpath, dirnames, filenames) in os.walk(data_dir):
         for f in filenames:
+            dirset.add(dirpath)
             filepath = dirpath + '\\' +f
             filelist.append(filepath)
 
     total_pos_count = {}
     total_neg_count = {}
+
+    dir_pos_count = {}
+    dir_neg_count = {}
+
     for f in filelist:
         df = pd.read_csv(f)
 
@@ -128,10 +134,26 @@ if __name__ == "__main__":
         print('Positive Count ' + str(pos_count))
         print('Negative Count ' + str(neg_count))
 
-    with open('pos_count.txt', 'w') as f1:
-        for key1, value1 in total_pos_count.items():
-            f1.write("%s - %s\n" % (key1, value1))
+        for d in dirset:
+            if d in f:
+                if d not in dir_pos_count:
+                    dir_pos_count[d] = 0
+                    dir_neg_count[d] = 0
+                dir_pos_count[d] += pos_count
+                dir_neg_count[d] += neg_count
 
-    with open('neg_count.txt', 'w') as f2:
-        for key2, value2 in total_neg_count.items():
-            f2.write("%s - %s\n" % (key2, value2))
+    with open('results\\pos_count.txt', 'w') as f:
+        for key, value in total_pos_count.items():
+            f.write("%s - %s\n" % (key, value))
+
+    with open('results\\neg_count.txt', 'w') as f:
+        for key, value in total_neg_count.items():
+            f.write("%s - %s\n" % (key, value))
+
+    with open('results\\dir_pos_count.txt', 'w') as f:
+        for key, value in dir_pos_count.items():
+            f.write("%s - %s\n" % (key, value))
+
+    with open('results\\dir_neg_count.txt', 'w') as f:
+        for key, value in dir_neg_count.items():
+            f.write("%s - %s\n" % (key, value))
