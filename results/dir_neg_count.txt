@@ -1,0 +1,5 @@
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets - 54044
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\FiannaFail - 13955
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\FineGael - 5138
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\SinnFein - 33924
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\SinnFein\MaryLouMcDonald - 9957
