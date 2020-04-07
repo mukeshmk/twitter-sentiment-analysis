@@ -48,7 +48,7 @@ if not os.path.exists(dataset_foler):
         os.makedirs(dataset_foler)
 
 # creating file name based on the query
-file_name = re.sub("[@#]","", query) + '_' + start_date + '_to_' + end_date + '_' + str(df.size)
+file_name = re.sub("[@#]","", query) + '_' + start_date + '_to_' + end_date + '_' + str(df.shape[0])
 
 # to avoid duplicate file names in folder
 path = dataset_foler + '/%s%s' % (file_name, file_ext)
