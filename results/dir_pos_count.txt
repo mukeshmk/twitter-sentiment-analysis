@@ -1,5 +1,6 @@
-D:\code\sem2\ta\twitter-sentiment-analysis\datasets - 60012
-D:\code\sem2\ta\twitter-sentiment-analysis\datasets\FiannaFail - 12866
-D:\code\sem2\ta\twitter-sentiment-analysis\datasets\FineGael - 5647
-D:\code\sem2\ta\twitter-sentiment-analysis\datasets\SinnFein - 40002
-D:\code\sem2\ta\twitter-sentiment-analysis\datasets\SinnFein\MaryLouMcDonald - 13283
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\FiannaFail - 61233
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\FiannaFail\MichealMartin - 51356
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\FineGael - 14766
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\FineGael\leovaradkar - 9247
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\SinnFein - 39926
+D:\code\sem2\ta\twitter-sentiment-analysis\datasets\SinnFein\MaryLouMcDonald - 12855
